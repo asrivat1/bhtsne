@@ -9,7 +9,7 @@ Note: The script does some minimal sanity checking of the input, but don't
 
 Example:
 
-    > echo -e '1.0\t0.0\n0.0\t1.0' | ./bhtsne.py -d 2 -p 0.1
+    > echo -e '1.0 0.0\n0.0 1.0' | ./bhtsne.py -d 2 -p 0.1
     -2458.83181442  -6525.87718385
     2458.83181442   6525.87718385
 
@@ -17,7 +17,7 @@ The output will not be normalised, maybe the below one-liner is of interest?:
 
     python -c 'import numpy;  from sys import stdin, stdout; 
         d = numpy.loadtxt(stdin); d -= d.min(axis=0); d /= d.max(axis=0);
-        numpy.savetxt(stdout, d, fmt="%.8f", delimiter="\t")'
+        numpy.savetxt(stdout, d, fmt="%.8f", delimiter=" ")'
 
 Author:     Pontus Stenetorp    <pontus stenetorp se>
 Version:    2013-01-22
@@ -149,7 +149,7 @@ def main(args):
     data = []
     for sample_line_num, sample_line in enumerate((l.rstrip('\n')
             for l in argp.input), start=1):
-        sample_data = sample_line.split('\t')
+        sample_data = sample_line.split(' ')
         try:
             assert len(sample_data) == dims, ('Input line #{} of '
                     'dimensionality {} although we have previously observed '
@@ -165,7 +165,7 @@ def main(args):
             verbose=argp.verbose):
         fmt = ''
         for i in range(1, len(result)):
-            fmt = fmt + '{}\t'
+            fmt = fmt + '{} '
         fmt = fmt + '{}\n'
         argp.output.write(fmt.format(*result))
 
